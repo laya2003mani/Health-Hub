@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Hub - Weight gain Program</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+         <!-- Pop-up Ad Container -->
+         <div id="adPopup" class="popup-container">
+            <div class="popup-content">
+                <span class="close-btn">&times;</span>
+                <img src="image/ad.jpg" alt="Advertisement" class="ad-image">
+            </div>
+        </div>
+    <div class="app-container">
+        <!-- Dashboard Sidebar -->
+        <div class="dashboard">
+            <div class="dashboard-header">
+                <h2><i class="fas fa-heartbeat"></i> Health Hub</h2>
+                <p>Your Weight gain Journey</p>
+            </div>
+            
+            <div class="nav-menu">
+                <a class="nav-item" onclick="showSection('dashboard')">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a class="nav-item active" onclick="showSection('workout')">
+                    <i class="fas fa-dumbbell"></i> Workout Plans
+                </a>
+                <a class="nav-item" onclick="showSection('diet')">
+                    <i class="fas fa-utensils"></i> Diet Plans
+                </a>
+                <a class="nav-item" onclick="showSection('mental')">
+                    <i class="fas fa-brain"></i> Mental Wellness
+                </a>
+                <a class="nav-item" onclick="showSection('progress')">
+                    <i class="fas fa-chart-line"></i> Progress Tracker
+                </a>
+                
+            </div>
+            
+            <div class="sign-out">
+                <i class="fas fa-sign-out-alt"></i> Sign Out
+            </div>
+        </div>
+<!-- Main Content Area -->
+<div class="main-content">
+    <!-- Content & Plans -->
+    <div class="content" id="content">
+        <!-- Dashboard Section -->
+        <div class="content-section" id="dashboard">
+            <div class="section-header">
+                <h1>Welcome Back, <span id="user-greeting">User</span>!</h1>
+                <p>Ready for your daily health journey?</p>
+            </div>
+            <div>
+            <div class="dashboard-card" style="background: linear-gradient(135deg, #a685e2, #6a3093);">
+                <i class="fas fa-fire"></i>
+                <h3>Today's Calories</h3>
+                <p id="today-calories" data-daily-goal="750">0 / 750 kcal</p>
+                <div class="progress-bar">
+                    <div id="calories-progress" class="progress" style="width: 0%"></div>
+                </div>
+            </div>
+                <div class="dashboard-card" style="background: linear-gradient(135deg, #ff9a9e, #fad0c4);">
+                    <i class="fas fa-weight"></i>
+                    <h3>Weight Progress</h3>
+                    <p id="weight-progress">0 kg (0 kg)</p>
+                    <div class="progress-bar">
+                        <div id="weight-progress-bar" class="progress" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="dashboard-card" style="background: linear-gradient(135deg, #ffecd2, #fcb69f);">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Current Streak</h3>
+                    <p id="streak-count">0 days</p>
+                    <div class="progress-bar">
+                        <div id="streak-progress" class="progress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quick-actions">
+                <h3>Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="showSection('workout')">
+                        <i class="fas fa-dumbbell"></i> Start Workout
+                    </button>
+                    <button class="action-btn" onclick="showSection('diet')">
+                        <i class="fas fa-utensils"></i> Log Meal
+                    </button>
+                    <button class="action-btn" onclick="showSection('progress')">
+                        <i class="fas fa-weight"></i> Track Weight
+                    </button>
+                </div>
+            </div>
+        </div>
+
+<!-- Workout Plans Section - Weight Gain Focus -->
+<div class="content-section workout-plans" id="workout">
+    <!-- Main Plans View -->
+    <div id="main-plans-view">
+        <div class="section-header">
+            <h1>Workout Plans</h1>
+            <p>Choose a plan that matches your muscle building goals</p>
+        </div>
+        <div class="quadrant">
+            <!-- Beginner Program -->
+            <div class="plan-box" onclick="showPlanDetails('beginner')" style="background: linear-gradient(135deg, #f5f7fa, #c3cfe2);">
+                <div class="plan-icon">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <h3>Beginner Mass</h3>
+                <p>Foundation building program</p>
+                <div class="plan-details">
+                    <span><i class="fas fa-clock"></i> 30-45 min/day</span>
+                    <span><i class="fas fa-calendar-alt"></i> 8 weeks</span>
+                </div>
+            </div>
+            
+            <!-- Intermediate Plan -->
+            <div class="plan-box" onclick="showPlanDetails('intermediate')" style="background: linear-gradient(135deg, #e0f7fa, #80deea);">
+                <div class="plan-icon">
+                    <i class="fas fa-weight"></i>
+                </div>
+                <h3>Intermediate Bulk</h3>
+                <p>Muscle growth focused</p>
+                <div class="plan-details">
+                    <span><i class="fas fa-clock"></i> 45-60 min/day</span>
+                    <span><i class="fas fa-calendar-alt"></i> 12 weeks</span>
+                </div>
+            </div>
+            
+            <!-- Advanced Challenge -->
+            <div class="plan-box" onclick="showPlanDetails('advanced')" style="background: linear-gradient(135deg, #ffebee, #ef9a9a);">
+                <div class="plan-icon">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <h3>Advanced Power</h3>
+                <p>Strength and size program</p>
+                <div class="plan-details">
+                    <span><i class="fas fa-clock"></i> 60-75 min/day</span>
+                    <span><i class="fas fa-calendar-alt"></i> 16 weeks</span>
+                </div>
+            </div>
+            
+            <!-- Specialized Plan -->
+            <div class="plan-box" onclick="showPlanDetails('specialized')" style="background: linear-gradient(135deg, #f1f8e9, #aed581);">
+                <div class="plan-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h3>Targeted Growth</h3>
+                <p>Focus on lagging muscle groups</p>
+                <div class="plan-details">
+                    <span><i class="fas fa-clock"></i> Varies</span>
+                    <span><i class="fas fa-calendar-alt"></i> Flexible</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Beginner Detail View -->
+    <div id="beginner-details" class="plan-detail-view">
+        <button class="back-button" onclick="backToPlans()">
+            <i class="fas fa-arrow-left"></i> Back to Plans
+        </button>
+        <div class="plan-header">
+            <div class="plan-icon">
+                <i class="fas fa-dumbbell"></i>
+            </div>
+            <h2>Beginner Mass Program</h2>
+            <p>Foundation building program</p>
+            <div class="plan-meta">
+                <span><i class="fas fa-clock"></i> 30-45 min/day</span>
+                <span><i class="fas fa-calendar-alt"></i> 8 weeks</span>
+            </div>
+        </div>
+        <div class="subcategories-container">
+            <!-- Compound Lifts -->
+            <div class="subcategory">
+                <div class="subcategory-header" onclick="toggleWorkouts(this)">
+                    <h3><i class="fas fa-arrows-alt"></i> Compound Lifts</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="workouts-list">
+                    <ul>
+                        <li>
+                            <div class="workout-info">
+                                Squats (3x8) - Feet shoulder-width, descend until thighs parallel
+                                <span class="cal-estimate">≈150 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(150)">Completed</button>
+                        </li>
+                        <li>
+                            <div class="workout-info">
+                                Bench Press (3x8) - Grip slightly wider than shoulders
+                                <span class="cal-estimate">≈120 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(120)">Completed</button>
+                        </li>
+                        <li>
+                            <div class="workout-info">
+                                Bent-over Rows (3x10) - Hinge at hips, pull elbows back
+                                <span class="cal-estimate">≈130 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(130)">Completed</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Assistance Work -->
+            <div class="subcategory">
+                <div class="subcategory-header" onclick="toggleWorkouts(this)">
+                    <h3><i class="fas fa-hands-helping"></i> Assistance Work</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="workouts-list">
+                    <ul>
+                        <li>
+                            <div class="workout-info">
+                                Dumbbell Shoulder Press (3x10) - Press from shoulders to full extension
+                                <span class="cal-estimate">≈100 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(100)">Completed</button>
+                        </li>
+                        <li>
+                            <div class="workout-info">
+                                Barbell Curls (3x12) - Keep elbows fixed at sides
+                                <span class="cal-estimate">≈80 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(80)">Completed</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Intermediate Detail View -->
+    <div id="intermediate-details" class="plan-detail-view">
+        <button class="back-button" onclick="backToPlans()">
+            <i class="fas fa-arrow-left"></i> Back to Plans
+        </button>
+        <div class="plan-header">
+            <div class="plan-icon">
+                <i class="fas fa-weight"></i>
+            </div>
+            <h2>Intermediate Bulk Plan</h2>
+            <p>Muscle growth focused</p>
+            <div class="plan-meta">
+                <span><i class="fas fa-clock"></i> 45-60 min/day</span>
+                <span><i class="fas fa-calendar-alt"></i> 12 weeks</span>
+            </div>
+        </div>
+        
+        <div class="subcategories-container">
+            <!-- Strength Focus -->
+            <div class="subcategory">
+                <div class="subcategory-header" onclick="toggleWorkouts(this)">
+                    <h3><i class="fas fa-fist-raised"></i> Strength Focus</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="workouts-list">
+                    <ul>
+                        <li>
+                            <div class="workout-info">
+                                Deadlifts (4x5) - Hips back, flat back, drive through heels
+                                <span class="cal-estimate">≈200 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(200)">Completed</button>
+                        </li>
+                        <li>
+                            <div class="workout-info">
+                                Incline Bench (4x6) - 30° bench, control descent
+                                <span class="cal-estimate">≈180 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(180)">Completed</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Hypertrophy Work -->
+            <div class="subcategory">
+                <div class="subcategory-header" onclick="toggleWorkouts(this)">
+                    <h3><i class="fas fa-expand"></i> Hypertrophy Work</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="workouts-list">
+                    <ul>
+                        <li>
+                            <div class="workout-info">
+                                Dumbbell Flyes (3x12) - Slight bend in elbows
+                                <span class="cal-estimate">≈120 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(120)">Completed</button>
+                        </li>
+                        <li>
+                            <div class="workout-info">
+                                Bulgarian Split Squats (3x10/leg) - Controlled descent
+                                <span class="cal-estimate">≈150 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(150)">Completed</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Advanced Detail View -->
+    <div id="advanced-details" class="plan-detail-view">
+        <button class="back-button" onclick="backToPlans()">
+            <i class="fas fa-arrow-left"></i> Back to Plans
+        </button>
+        <div class="plan-header">
+            <div class="plan-icon">
+                <i class="fas fa-fire"></i>
+            </div>
+            <h2>Advanced Power Program</h2>
+            <p>Strength and size program</p>
+            <div class="plan-meta">
+                <span><i class="fas fa-clock"></i> 60-75 min/day</span>
+                <span><i class="fas fa-calendar-alt"></i> 16 weeks</span>
+            </div>
+        </div>
+        
+        <div class="subcategories-container">
+            <!-- Power Lifts -->
+            <div class="subcategory">
+                <div class="subcategory-header" onclick="toggleWorkouts(this)">
+                    <h3><i class="fas fa-bolt"></i> Power Lifts</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="workouts-list">
+                    <ul>
+                        <li>
+                            <div class="workout-info">
+                                Low Bar Squats (5x5) - Bar below traps, wider stance
+                                <span class="cal-estimate">≈250 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(250)">Completed</button>
+                        </li>
+                        <li>
+                            <div class="workout-info">
+                                Overhead Press (5x5) - Strict form, full lockout
+                                <span class="cal-estimate">≈200 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(200)">Completed</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Accessory Work -->
+            <div class="subcategory">
+                <div class="subcategory-header" onclick="toggleWorkouts(this)">
+                    <h3><i class="fas fa-dumbbell"></i> Accessory Work</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="workouts-list">
+                    <ul>
+                        <li>
+                            <div class="workout-info">
+                                Weighted Dips (3x8) - Lean forward slightly
+                                <span class="cal-estimate">≈180 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(180)">Completed</button>
+                        </li>
+                        <li>
+                            <div class="workout-info">
+                                Romanian Deadlifts (3x8) - Hinge at hips, hamstring focus
+                                <span class="cal-estimate">≈220 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(220)">Completed</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Specialized Detail View -->
+    <div id="specialized-details" class="plan-detail-view">
+        <button class="back-button" onclick="backToPlans()">
+            <i class="fas fa-arrow-left"></i> Back to Plans
+        </button>
+        <div class="plan-header">
+            <div class="plan-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h2>Targeted Growth Program</h2>
+            <p>Focus on lagging muscle groups</p>
+            <div class="plan-meta">
+                <span><i class="fas fa-clock"></i> Varies</span>
+                <span><i class="fas fa-calendar-alt"></i> Flexible</span>
+            </div>
+        </div>
+        
+        <div class="subcategories-container">
+            <!-- Upper Body Focus -->
+            <div class="subcategory">
+                <div class="subcategory-header" onclick="toggleWorkouts(this)">
+                    <h3><i class="fas fa-hand-paper"></i> Upper Body Focus</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="workouts-list">
+                    <ul>
+                        <li>
+                            <div class="workout-info">
+                                Incline Dumbbell Press (4x10) - 45° bench, full ROM
+                                <span class="cal-estimate">≈180 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(180)">Completed</button>
+                        </li>
+                        <li>
+                            <div class="workout-info">
+                                Lateral Raises (4x12) - Slight bend in elbows
+                                <span class="cal-estimate">≈120 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(120)">Completed</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Lower Body Focus -->
+            <div class="subcategory">
+                <div class="subcategory-header" onclick="toggleWorkouts(this)">
+                    <h3><i class="fas fa-running"></i> Lower Body Focus</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="workouts-list">
+                    <ul>
+                        <li>
+                            <div class="workout-info">
+                                Front Squats (4x8) - Clean grip, elbows high
+                                <span class="cal-estimate">≈220 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(220)">Completed</button>
+                        </li>
+                        <li>
+                            <div class="workout-info">
+                                Nordic Hamstring Curls (3x10) - Control eccentric
+                                <span class="cal-estimate">≈150 kcal</span>
+                            </div>
+                            <button class="completed-btn" onclick="addCalories(150)">Completed</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 
+
+                <!-- Expanded Workout Categories would go here -->
+                 
+                <!-- Diet Plans Section - Weight Gain Version -->
+<div class="content-section diet-plans" id="diet">
+    <!-- Main Diet View -->
+    <div id="main-diets-view">
+        <div class="section-header">
+            <h1>Nutrition Plans</h1>
+            <p>Select a diet for healthy weight gain</p>
+        </div>
+        
+        <div class="quadrant">
+            <!-- Vegetarian Plan -->
+            <div class="diet-box" data-diet="vegetarian" onclick="showDietDetails('vegetarian')">
+                <div class="diet-badge vegetarian">Veg</div>
+                <h3>Vegetarian</h3>
+                <p>High-calorie plant-based</p>
+                <div class="diet-stats">
+                    <span><i class="fas fa-seedling"></i> Calorie Dense</span>
+                    <span><i class="fas fa-weight"></i> 2500-3000 kcal/day</span>
+                </div>
+            </div>
+            
+            <!-- Eggetarian Plan -->
+            <div class="diet-box" data-diet="eggetarian" onclick="showDietDetails('eggetarian')">
+                <div class="diet-badge eggetarian">Egg</div>
+                <h3>Eggetarian</h3>
+                <p>Vegetarian + Eggs</p>
+                <div class="diet-stats">
+                    <span><i class="fas fa-egg"></i> High Protein</span>
+                    <span><i class="fas fa-weight"></i> 2700-3200 kcal/day</span>
+                </div>
+            </div>
+            
+            <!-- Vegan Plan -->
+            <div class="diet-box" data-diet="vegan" onclick="showDietDetails('vegan')">
+                <div class="diet-badge vegan">Vegan</div>
+                <h3>Vegan</h3>
+                <p>Plant-based weight gain</p>
+                <div class="diet-stats">
+                    <span><i class="fas fa-globe"></i> Nutrient Rich</span>
+                    <span><i class="fas fa-weight"></i> 2400-2900 kcal/day</span>
+                </div>
+            </div>
+            
+            <!-- Non-Vegetarian Plan -->
+            <div class="diet-box" data-diet="nonveg" onclick="showDietDetails('nonveg')">
+                <div class="diet-badge nonveg">Non-Veg</div>
+                <h3>Non-Vegetarian</h3>
+                <p>High-protein weight gain</p>
+                <div class="diet-stats">
+                    <span><i class="fas fa-drumstick-bite"></i> Calorie Packed</span>
+                    <span><i class="fas fa-weight"></i> 2800-3500 kcal/day</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Nutrition tracker remains the same -->
+        <div class="graph-container diet-log" id="diet-log">
+            <h3>Today's Nutrition</h3>
+            <div class="nutrition-summary">
+                <div class="nutrient">
+                    <div class="nutrient-bar protein"></div>
+                    <span>Protein: 150-200g</span>
+                </div>
+                <div class="nutrient">
+                    <div class="nutrient-bar carbs"></div>
+                    <span>Carbs: 300-400g</span>
+                </div>
+                <div class="nutrient">
+                    <div class="nutrient-bar fat"></div>
+                    <span>Fat: 80-120g</span>
+                </div>
+            </div>
+            
+            <div class="food-input-container">
+                <input type="text" id="food-input" placeholder="What did you eat today?">
+                <button onclick="addFood()"><i class="fas fa-plus"></i></button>
+            </div>
+            <ul id="food-list"></ul>
+        </div>
+    </div>
+    
+    <!-- Vegetarian Weight Gain Detail View -->
+    <div id="vegetarian-details" class="diet-detail-view">
+        <button class="back-button" onclick="backToDiets()">
+            <i class="fas fa-arrow-left"></i> Back to Diets
+        </button>
+        <div class="diet-header">
+            <div class="diet-icon">
+                <i class="fas fa-seedling"></i>
+            </div>
+            <h2>Vegetarian Weight Gain</h2>
+            <p>High-calorie plant-based nutrition</p>
+            <div class="diet-benefits">
+                <span><i class="fas fa-weight"></i> 2500-3000 kcal/day</span>
+                <span><i class="fas fa-utensils"></i> 5-6 meals/day</span>
+                <span><i class="fas fa-seedling"></i> Protein: 1.6g/kg body weight</span>
+            </div>
+        </div>
+        <div class="meal-categories">
+            <!-- Breakfast -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-sun"></i> Breakfast</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Peanut butter banana smoothie with oats and flaxseeds (700 kcal)</li>
+                        <li>Paneer bhurji with 3 whole wheat parathas and ghee (850 kcal)</li>
+                        <li>Oats porridge with nuts, seeds, and full-fat milk (650 kcal)</li>
+                        <li>Avocado toast with 4 eggs (vegetarian version with tofu scramble) (750 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Lunch -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-utensils"></i> Lunch</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Dal makhani with jeera rice, 2 rotis, and raita (900 kcal)</li>
+                        <li>Paneer butter masala with naan and vegetable biryani (950 kcal)</li>
+                        <li>Chole with bhature and sweet lassi (1000 kcal)</li>
+                        <li>Rajma chawal with curd and ghee (850 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Dinner -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-moon"></i> Dinner</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Malai kofta with 3 rotis and rice (900 kcal)</li>
+                        <li>Vegetable korma with paratha and raita (850 kcal)</li>
+                        <li>Cheese pasta with garlic bread (950 kcal)</li>
+                        <li>Mushroom stroganoff with mashed potatoes (800 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Snacks -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-apple-alt"></i> Snacks</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Mixed nuts and dried fruits (100g = 600 kcal)</li>
+                        <li>Peanut butter and banana sandwich (500 kcal)</li>
+                        <li>Cheese toast with milkshake (650 kcal)</li>
+                        <li>Besan laddoo (2 pieces = 400 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Drinks -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-glass-whiskey"></i> Drinks</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Weight gain shake (milk, banana, oats, peanut butter = 800 kcal)</li>
+                        <li>Mango lassi (full fat yogurt = 400 kcal)</li>
+                        <li>Hot chocolate with cream (350 kcal)</li>
+                        <li>Badam milk with saffron (300 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Eggetarian Weight Gain Detail View -->
+    <div id="eggetarian-details" class="diet-detail-view">
+        <button class="back-button" onclick="backToDiets()">
+            <i class="fas fa-arrow-left"></i> Back to Diets
+        </button>
+        <div class="diet-header">
+            <div class="diet-icon">
+                <i class="fas fa-egg"></i>
+            </div>
+            <h2>Eggetarian Weight Gain</h2>
+            <p>Vegetarian + eggs for mass building</p>
+            <div class="diet-benefits">
+                <span><i class="fas fa-weight"></i> 2700-3200 kcal/day</span>
+                <span><i class="fas fa-egg"></i> 4-6 eggs/day</span>
+                <span><i class="fas fa-utensils"></i> Protein: 1.8g/kg body weight</span>
+            </div>
+        </div>
+        <div class="meal-categories">
+            <!-- Breakfast -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-sun"></i> Breakfast</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>4-egg omelette with cheese, 3 toast with butter (900 kcal)</li>
+                        <li>Egg bhurji with 3 parathas and lassi (950 kcal)</li>
+                        <li>French toast (4 slices) with maple syrup and banana (850 kcal)</li>
+                        <li>Scrambled eggs with avocado on sourdough (800 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Lunch -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-utensils"></i> Lunch</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Egg curry with 3 rotis and rice (1000 kcal)</li>
+                        <li>Paneer and egg fried rice with raita (950 kcal)</li>
+                        <li>Egg sandwich with potato chips and milkshake (900 kcal)</li>
+                        <li>Egg biryani with boiled eggs (850 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Dinner -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-moon"></i> Dinner</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Egg noodles with vegetables and extra eggs (900 kcal)</li>
+                        <li>Shakshuka with 4 eggs and bread (850 kcal)</li>
+                        <li>Egg fried rice with extra eggs (800 kcal)</li>
+                        <li>Quiche with salad and potatoes (950 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Snacks -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-apple-alt"></i> Snacks</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Hard boiled eggs (4 eggs = 300 kcal) with cheese (200 kcal)</li>
+                        <li>Egg muffins (3 pieces = 450 kcal)</li>
+                        <li>Egg salad sandwich (600 kcal)</li>
+                        <li>Protein bar with banana (400 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Drinks -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-glass-whiskey"></i> Drinks</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Eggnog (whole milk, eggs, cream = 600 kcal)</li>
+                        <li>Weight gain shake with raw egg (800 kcal)</li>
+                        <li>Malted milk with egg (500 kcal)</li>
+                        <li>Sweet lassi with saffron (400 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Vegan Weight Gain Detail View -->
+    <div id="vegan-details" class="diet-detail-view">
+        <button class="back-button" onclick="backToDiets()">
+            <i class="fas fa-arrow-left"></i> Back to Diets
+        </button>
+        <div class="diet-header">
+            <div class="diet-icon">
+                <i class="fas fa-globe"></i>
+            </div>
+            <h2>Vegan Weight Gain</h2>
+            <p>Plant-based calorie surplus</p>
+            <div class="diet-benefits">
+                <span><i class="fas fa-weight"></i> 2400-2900 kcal/day</span>
+                <span><i class="fas fa-seedling"></i> Healthy fats focus</span>
+                <span><i class="fas fa-utensils"></i> Protein: 1.6g/kg from plants</span>
+            </div>
+        </div>
+        <div class="meal-categories">
+            <!-- Breakfast -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-sun"></i> Breakfast</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Vegan protein pancakes with maple syrup and nuts (800 kcal)</li>
+                        <li>Tofu scramble with avocado toast (750 kcal)</li>
+                        <li>Chia pudding with coconut milk and nut butter (700 kcal)</li>
+                        <li>Peanut butter banana smoothie with oats (850 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Lunch -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-utensils"></i> Lunch</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Lentil curry with coconut milk and rice (900 kcal)</li>
+                        <li>Vegan burger with sweet potato fries (950 kcal)</li>
+                        <li>Chickpea pasta with vegan alfredo sauce (850 kcal)</li>
+                        <li>Vegan thali with 3 rotis, dal, veggies, and vegan ghee (1000 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Dinner -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-moon"></i> Dinner</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Vegan mac and cheese with breadcrumbs (900 kcal)</li>
+                        <li>Tempeh stir fry with peanut sauce and rice (850 kcal)</li>
+                        <li>Vegan shepherd's pie with lentils (800 kcal)</li>
+                        <li>Stuffed portobello mushrooms with quinoa (750 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Snacks -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-apple-alt"></i> Snacks</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Trail mix with nuts, seeds, and dried fruit (100g = 600 kcal)</li>
+                        <li>Vegan protein bar with nut butter (500 kcal)</li>
+                        <li>Hummus with pita and olives (450 kcal)</li>
+                        <li>Dark chocolate with almonds (400 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Drinks -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-glass-whiskey"></i> Drinks</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Vegan weight gain shake (oat milk, banana, peanut butter, protein powder = 900 kcal)</li>
+                        <li>Coconut milk smoothie with dates (600 kcal)</li>
+                        <li>Avocado chocolate milkshake (700 kcal)</li>
+                        <li>Cashew milk with turmeric (400 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Non-Vegetarian Weight Gain Detail View -->
+    <div id="nonveg-details" class="diet-detail-view">
+        <button class="back-button" onclick="backToDiets()">
+            <i class="fas fa-arrow-left"></i> Back to Diets
+        </button>
+        <div class="diet-header">
+            <div class="diet-icon">
+                <i class="fas fa-drumstick-bite"></i>
+            </div>
+            <h2>Non-Veg Weight Gain</h2>
+            <p>High-protein mass building</p>
+            <div class="diet-benefits">
+                <span><i class="fas fa-weight"></i> 2800-3500 kcal/day</span>
+                <span><i class="fas fa-drumstick-bite"></i> 2-3 meat servings/day</span>
+                <span><i class="fas fa-utensils"></i> Protein: 2g/kg body weight</span>
+            </div>
+        </div>
+        <div class="meal-categories">
+            <!-- Breakfast -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-sun"></i> Breakfast</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>4-egg omelette with bacon and hash browns (1000 kcal)</li>
+                        <li>Steak and eggs with toast (950 kcal)</li>
+                        <li>Chicken sausage breakfast burrito (900 kcal)</li>
+                        <li>Smoked salmon bagel with cream cheese (850 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Lunch -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-utensils"></i> Lunch</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Grilled chicken with mashed potatoes and gravy (1100 kcal)</li>
+                        <li>Beef burger with cheese and fries (1200 kcal)</li>
+                        <li>Fish and chips with tartar sauce (1000 kcal)</li>
+                        <li>Lamb curry with 3 rotis and rice (950 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Dinner -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-moon"></i> Dinner</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Ribeye steak with baked potato and butter (1200 kcal)</li>
+                        <li>Roast chicken with stuffing and vegetables (1000 kcal)</li>
+                        <li>Pork chops with mac and cheese (1100 kcal)</li>
+                        <li>Butter chicken with naan and rice (950 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Snacks -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-apple-alt"></i> Snacks</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Tuna salad sandwich (600 kcal)</li>
+                        <li>Beef jerky with cheese (500 kcal)</li>
+                        <li>Chicken wings (6 pieces = 700 kcal)</li>
+                        <li>Protein shake with peanut butter (800 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Drinks -->
+            <div class="meal-category">
+                <div class="meal-category-header" onclick="toggleMealOptions(this)">
+                    <h3><i class="fas fa-glass-whiskey"></i> Drinks</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="meal-options">
+                    <ul>
+                        <li>Weight gain shake with whole milk and protein (1000 kcal)</li>
+                        <li>Chocolate peanut butter milkshake (800 kcal)</li>
+                        <li>Eggnog with cream (600 kcal)</li>
+                        <li>Whole milk with honey (400 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                
+                <!-- Expanded Diet Categories would go here -->
+<!-- Progress Tracker Section -->
+<div class="content-section" id="progress">
+    <div class="section-header">
+        <h1>Progress Tracker</h1>
+        <p>Monitor your weight loss journey</p>
+    </div>
+    
+    <div class="progress-container">
+        <div class="progress-stats">
+            <div class="stat-card">
+                <h3>Current Weight</h3>
+                <p>75.4 kg</p>
+                <span class="trend down"><i class="fas fa-arrow-down"></i> 2.6 kg</span>
+            </div>
+            <div class="stat-card">
+                <h3>Target Weight</h3>
+                <p>68 kg</p>
+                <span class="trend">7.4 kg to go</span>
+            </div>
+            <div class="stat-card">
+                <h3>Weekly Change</h3>
+                <p>-0.8 kg</p>
+            </div>
+        </div>
+        
+        <div class="progress-input">
+            <h3>Log Your Current Weight</h3>
+            <div class="input-group">
+                <input type="number" id="weight-input" placeholder="Enter current weight (kg)">
+                <button onclick="logWeight()">Submit</button>
+            </div>
+        </div>
+        <div class="motivation-message">
+            <i class="fas fa-fire" style="color: #ff6b6b;"></i>
+            <p>Keep going! You're making great progress!</p>
+        </div>
+        <div class="weight-options">
+            <button class="option-button maintain-btn" onclick="window.location.href='maintain.html'">
+                <i class="fas fa-balance-scale"></i>
+                <span>Maintain Weight</span>
+            </button>
+            <button class="option-button gain-btn" onclick="window.location.href='loss.html'">
+                <i class="fas fa-arrow-down"></i>
+                <span>Lose Weight</span>
+            </button>
+        </div>
+    </div>
+</div>
+            
+<!-- Mental Wellness Section -->
+<div class="content-section" id="mental">
+    <!-- Main Mental Wellness View -->
+    <div id="main-mental-view">
+        <div class="section-header">
+            <h1>Mental Wellness</h1>
+            <p>Resources to support your mental health journey</p>
+        </div>
+        
+        <div class="mental-grid">
+            <!-- Mindfulness Card -->
+            <div class="mental-card" style="background: linear-gradient(135deg, #a8edea, #fed6e3);">
+                <i class="fas fa-spa"></i>
+                <h3>Mindfulness</h3>
+                <p>Short practices to increase awareness</p>
+                <button onclick="showMentalDetails('mindfulness')">Explore</button>
+            </div>
+            
+            <!-- Sleep Card -->
+            <div class="mental-card" style="background: linear-gradient(135deg, #f5f7fa, #c3cfe2);">
+                <i class="fas fa-moon"></i>
+                <h3>Sleep Support</h3>
+                <p>Simple habits for better rest</p>
+                <button onclick="showMentalDetails('sleep')">View Resources</button>
+            </div>
+            
+            <!-- Stress Card -->
+            <div class="mental-card" style="background: linear-gradient(135deg, #fff6b7, #f6416c);">
+                <i class="fas fa-heart"></i>
+                <h3>Stress Relief</h3>
+                <p>Quick techniques for calm</p>
+                <button onclick="showMentalDetails('stress')">Learn Techniques</button>
+            </div>
+            
+            <!-- Professional Help Card -->
+            <div class="mental-card" style="background: linear-gradient(135deg, #fccb90, #d57eeb);">
+                <i class="fas fa-hands-helping"></i>
+                <h3>Professional Support</h3>
+                <p>Connect with therapists</p>
+                <button onclick="showMentalDetails('therapy')">Find Help</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mindfulness Detail View -->
+    <div id="mindfulness-details" class="mental-detail-view">
+        <button class="back-button" onclick="backToMentalMain()">
+            <i class="fas fa-arrow-left"></i> Back to Resources
+        </button>
+        
+        <div class="mental-header">
+            <div class="mental-icon">
+                <i class="fas fa-spa"></i>
+            </div>
+            <h2>Mindfulness Practices</h2>
+            <p>Develop present-moment awareness</p>
+        </div>
+        
+        <div class="resource-categories">
+            <div class="resource-category">
+                <h3><i class="fas fa-wind"></i> Breathing Exercises</h3>
+                <div class="resource-items">
+                    <a href="#" class="resource-item">
+                        <h4>4-4-4 Breathing</h4>
+                        <p>Inhale (4s) → Hold (4s) → Exhale (4s)</p>
+                    </a>
+                    <a href="#" class="resource-item">
+                        <h4>Morning Awareness</h4>
+                        <p>Start your day mindfully</p>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="resource-category">
+                <h3><i class="fas fa-book-open"></i> Journaling</h3>
+                <div class="resource-items">
+                    <a href="#" class="resource-item">
+                        <h4>Gratitude Practice</h4>
+                        <p>List 3 things you're thankful for</p>
+                    </a>
+                    <a href="#" class="resource-item">
+                        <h4>Body Scan</h4>
+                        <p>5-min head-to-toe awareness</p>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="resource-category">
+                <h3><i class="fas fa-walking"></i> Active Practices</h3>
+                <div class="resource-items">
+                    <a href="#" class="resource-item">
+                        <h4>Mindful Walking</h4>
+                        <p>Focus on footstep sensations</p>
+                    </a>
+                    <a href="#" class="resource-item">
+                        <h4>Daily Reminders</h4>
+                        <p>Mindfulness triggers</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sleep Detail View -->
+    <div id="sleep-details" class="mental-detail-view">
+        <button class="back-button" onclick="backToMentalMain()">
+            <i class="fas fa-arrow-left"></i> Back to Resources
+        </button>
+        
+        <div class="mental-header">
+            <div class="mental-icon">
+                <i class="fas fa-moon"></i>
+            </div>
+            <h2>Sleep Support</h2>
+            <p>Resources for better rest</p>
+        </div>
+        
+        <div class="resource-categories">
+            <div class="resource-category">
+                <h3><i class="fas fa-mobile-alt"></i> Digital Hygiene</h3>
+                <div class="resource-items">
+                    <a href="#" class="resource-item">
+                        <h4>Screen-Free Time</h4>
+                        <p>30 minutes before bed</p>
+                    </a>
+                    <a href="#" class="resource-item">
+                        <h4>Blue Light Filters</h4>
+                        <p>Reduce eye strain</p>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="resource-category">
+                <h3><i class="fas fa-clock"></i> Sleep Routine</h3>
+                <div class="resource-items">
+                    <a href="#" class="resource-item">
+                        <h4>Consistent Schedule</h4>
+                        <p>Fixed bedtime and wake time</p>
+                    </a>
+                    <a href="#" class="resource-item">
+                        <h4>4-7-8 Breathing</h4>
+                        <p>Inhale 4s → Hold 7s → Exhale 8s</p>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="resource-category">
+                <h3><i class="fas fa-mug-hot"></i> Relaxation</h3>
+                <div class="resource-items">
+                    <a href="#" class="resource-item">
+                        <h4>Chamomile Tea</h4>
+                        <p>Natural sleep aid</p>
+                    </a>
+                    <a href="#" class="resource-item">
+                        <h4>Gentle Stretching</h4>
+                        <p>Nighttime relaxation</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Stress Detail View -->
+    <div id="stress-details" class="mental-detail-view">
+        <button class="back-button" onclick="backToMentalMain()">
+            <i class="fas fa-arrow-left"></i> Back to Resources
+        </button>
+        
+        <div class="mental-header">
+            <div class="mental-icon">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h2>Stress Management</h2>
+            <p>Tools for daily resilience</p>
+        </div>
+        
+        <div class="resource-categories">
+            <div class="resource-category">
+                <h3><i class="fas fa-shoe-prints"></i> Grounding Techniques</h3>
+                <div class="resource-items">
+                    <a href="#" class="resource-item">
+                        <h4>5-4-3-2-1 Method</h4>
+                        <p>Engage all 5 senses</p>
+                    </a>
+                    <a href="#" class="resource-item">
+                        <h4>Hourly Stretch Breaks</h4>
+                        <p>1-min movement breaks</p>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="resource-category">
+                <h3><i class="fas fa-pencil-alt"></i> Creative Outlets</h3>
+                <div class="resource-items">
+                    <a href="#" class="resource-item">
+                        <h4>Scribble Drawing</h4>
+                        <p>Doodle to release stress</p>
+                    </a>
+                    <a href="#" class="resource-item">
+                        <h4>Music Therapy</h4>
+                        <p>5-10 min audio reset</p>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="resource-category">
+                <h3><i class="fas fa-comment"></i> Positive Self-Talk</h3>
+                <div class="resource-items">
+                    <a href="#" class="resource-item">
+                        <h4>Affirmations</h4>
+                        <p>"I am doing my best today"</p>
+                    </a>
+                    <a href="#" class="resource-item">
+                        <h4>Thought Reframing</h4>
+                        <p>Change your perspective</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Therapy Detail View -->
+    <div id="therapy-details" class="mental-detail-view">
+        <button class="back-button" onclick="backToMentalMain()">
+            <i class="fas fa-arrow-left"></i> Back to Resources
+        </button>
+        
+        <div class="mental-header">
+            <div class="mental-icon">
+                <i class="fas fa-hands-helping"></i>
+            </div>
+            <h2>Professional Support</h2>
+            <p>Find the right help for your needs</p>
+        </div>
+        
+        <div class="resource-categories">
+            <div class="resource-category">
+                <h3><i class="fas fa-search"></i> Find a Therapist</h3>
+                <div class="resource-items">
+                    <a href="#" class="resource-item">
+                        <h4>Therapist Directory</h4>
+                        <p>Search by specialty</p>
+                    </a>
+                    <a href="#" class="resource-item">
+                        <h4>Online Therapy Options</h4>
+                        <p>Virtual support</p>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="resource-category">
+                <h3><i class="fas fa-project-diagram"></i> Therapy Approaches</h3>
+                <div class="resource-items">
+                    <a href="#" class="resource-item">
+                        <h4>Cognitive Behavioral</h4>
+                        <p>Thought patterns</p>
+                    </a>
+                    <a href="#" class="resource-item">
+                        <h4>Mindfulness-Based</h4>
+                        <p>Present focus</p>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="resource-category">
+                <h3><i class="fas fa-question-circle"></i> Getting Started</h3>
+                <div class="resource-items">
+                    <a href="#" class="resource-item">
+                        <h4>First Session Guide</h4>
+                        <p>What to expect</p>
+                    </a>
+                    <a href="#" class="resource-item">
+                        <h4>Insurance Help</h4>
+                        <p>Coverage options</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+            
+            <!-- Profile & Progress -->
+            <div class="profile-progress" id="profile-progress">
+                <div class="profile-header">
+                    <div class="profile-pic" id="profile-pic">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h2 id="profile-name">John Doe</h2>
+                        <p>Member since <span id="member-since">2023</span></p>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-weight"></i>
+                        <div>
+                            <h4>Current Weight</h4>
+                            <p id="current-weight-display">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-bullseye"></i>
+                        <div>
+                            <h4>Target Weight</h4>
+                            <p id="target-weight-display">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-utensils"></i>
+                        <div>
+                            <h4>Daily Calories Intake</h4>
+                            <p id="calories-display">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="activity-calendar">
+                    <h3>This Week's Activity</h3>
+                    <div class="calendar-grid">
+                        <!-- Monday -->
+                        <div class="day" style="--intensity: 0.8;">
+                            <div class="day-name">Mon</div>
+                            <div class="day-activity"></div>
+                        </div>
+                        
+                        <!-- Tuesday -->
+                        <div class="day" style="--intensity: 1.0;">
+                            <div class="day-name">Tue</div>
+                            <div class="day-activity"></div>
+                        </div>
+                        
+                        <!-- Wednesday -->
+                        <div class="day" style="--intensity: 0.6;">
+                            <div class="day-name">Wed</div>
+                            <div class="day-activity"></div>
+                        </div>
+                        
+                        <!-- Thursday -->
+                        <div class="day" style="--intensity: 0.9;">
+                            <div class="day-name">Thu</div>
+                            <div class="day-activity"></div>
+                        </div>
+                        
+                        <!-- Friday -->
+                        <div class="day" style="--intensity: 0.7;">
+                            <div class="day-name">Fri</div>
+                            <div class="day-activity"></div>
+                        </div>
+                        
+                        <!-- Saturday -->
+                        <div class="day" style="--intensity: 0.4;">
+                            <div class="day-name">Sat</div>
+                            <div class="day-activity"></div>
+                        </div>
+                        
+                        <!-- Sunday -->
+                        <div class="day" style="--intensity: 0.2;">
+                            <div class="day-name">Sun</div>
+                            <div class="day-activity"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="calendar-legend">
+                        <span>Low</span>
+                        <div class="legend-gradient"></div>
+                        <span>High</span>
+                    </div>
+                </div>
+                
+                <div class="water-tracker">
+                    <h3>Water Intake</h3>
+                    <div class="water-bottles">
+                        <div class="bottle" onclick="logWater(1)"><i class="fas fa-tint"></i> 250ml</div>
+                        <div class="bottle" onclick="logWater(2)"><i class="fas fa-tint"></i> 500ml</div>
+                        <div class="bottle" onclick="logWater(3)"><i class="fas fa-tint"></i> 1L</div>
+                    </div>
+                    <div class="water-progress">
+                        <div class="water-progress-bar">
+                            <div class="water-progress-fill" style="width: 60%"></div>
+                        </div>
+                        <span>0/5 L today</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Hub - Your Wellness Journey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style/ProfStyles.css">
+</head>
+<body>
+    <!-- Profile Setup Form Container -->
+    <div class="form-container" id="profile-setup">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="form-slide active">
+            <h2>Welcome to Health Hub!</h2>
+            <p>Let's set up your profile to get personalized recommendations</p>
+            <h3>What's your date of birth?</h3>
+            <input type="date" id="dob" required>
+            <button onclick="nextSlide()">Next</button>
+        </div>
+
+        <div class="form-slide">
+            <h2>Enter your height (cm)</h2>
+            <input type="number" id="height" placeholder="Height in cm" required>
+            <div class="button-group">
+                <button class="secondary" onclick="prevSlide()">Back</button>
+                <button onclick="nextSlide()">Next</button>
+            </div>
+        </div>
+
+        <div class="form-slide">
+            <h2>Enter your weight (kg)</h2>
+            <input type="number" id="weight" placeholder="Weight in kg" required>
+            <div id="bmiResult" class="bmi-info" style="display:none;">
+                <div>Your BMI: <span class="bmi-value" id="bmiValue">0</span></div>
+                <div class="bmi-category" id="bmiCategory"></div>
+                <div class="healthy-range">Healthy weight range for your height: 
+                    <span class="target-range" id="healthyRange"></span>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="secondary" onclick="prevSlide()">Back</button>
+                <button onclick="nextSlide()">Next</button>
+            </div>
+        </div>
+
+        <div class="form-slide">
+            <h2>Select Your Goal</h2>
+            <select id="goal" required>
+                <option value="" disabled selected>Select your goal</option>
+                <option value="gain" data-target="gain.html">Weight Gain</option>
+                <option value="loss" data-target="loss.html">Weight Loss</option>
+                <option value="maintain" data-target="maintain.html">Maintain Weight</option>
+            </select>
+            <div class="button-group">
+                <button class="secondary" onclick="prevSlide()">Back</button>
+                <button onclick="nextSlide()">Next</button>
+            </div>
+        </div>
+
+        <div class="form-slide">
+            <h2>Set Your Target Weight</h2>
+            <div class="slider-container">
+                <input type="range" id="target-weight" min="40" max="120" step="0.5" value="60" oninput="updateWeightScale()">
+                <p id="target-display">Target: 60kg</p>
+                <div id="targetFeedback" style="margin-top: 15px;"></div>
+            </div>
+            <div class="button-group">
+                <button class="secondary" onclick="prevSlide()">Back</button>
+                <button id="finishBtn">Finish</button>
+            </div>
+        </div>
+    </div>
+        
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.form-slide');
+        const progress = document.getElementById('progress');
+        const finishBtn = document.getElementById('finishBtn');
+        let healthyMinWeight = 0;
+        let healthyMaxWeight = 0;
+        let currentWeight = 0;
+
+        function updateProgress() {
+            progress.style.width = `${(currentSlide / (slides.length - 1)) * 100}%`;
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            currentSlide = index;
+            updateProgress();
+            
+            // When showing weight slide, calculate BMI
+            if (index === 2) {
+                calculateBMI();
+            }
+            
+            // When showing target weight slide, set appropriate range
+            if (index === 4) {
+                setupTargetWeightSlider();
+            }
+        }
+
+        function nextSlide() {
+            // Validate current slide before proceeding
+            if (currentSlide === 0 && !document.getElementById('dob').value) {
+                alert('Please enter your date of birth');
+                return;
+            }
+            if (currentSlide === 1 && !document.getElementById('height').value) {
+                alert('Please enter your height');
+                return;
+            }
+            if (currentSlide === 2 && !document.getElementById('weight').value) {
+                alert('Please enter your weight');
+                return;
+            }
+            if (currentSlide === 3 && !document.getElementById('goal').value) {
+                alert('Please select your goal');
+                return;
+            }
+
+            if (currentSlide < slides.length - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        function calculateBMI() {
+            const height = parseFloat(document.getElementById('height').value) / 100; // convert to meters
+            const weight = parseFloat(document.getElementById('weight').value);
+            currentWeight = weight;
+            
+            if (height && weight) {
+                const bmi = weight / (height * height);
+                document.getElementById('bmiValue').textContent = bmi.toFixed(1);
+                
+                // Calculate healthy weight range (BMI 18.5-24.9)
+                healthyMinWeight = 18.5 * height * height;
+                healthyMaxWeight = 24.9 * height * height;
+                document.getElementById('healthyRange').textContent = 
+                    `${healthyMinWeight.toFixed(1)}kg - ${healthyMaxWeight.toFixed(1)}kg`;
+                
+                // Determine BMI category
+                let category = '';
+                let categoryColor = '';
+                if (bmi < 18.5) {
+                    category = 'Underweight';
+                    categoryColor = '#FF9800';
+                } else if (bmi < 25) {
+                    category = 'Normal weight';
+                    categoryColor = '#4CAF50';
+                } else if (bmi < 30) {
+                    category = 'Overweight';
+                    categoryColor = '#FF9800';
+                } else {
+                    category = 'Obese';
+                    categoryColor = '#F44336';
+                }
+                
+                document.getElementById('bmiCategory').textContent = category;
+                document.getElementById('bmiCategory').style.color = categoryColor;
+                document.getElementById('bmiResult').style.display = 'block';
+            }
+        }
+
+        function setupTargetWeightSlider() {
+            const goal = document.getElementById('goal').value;
+            const slider = document.getElementById('target-weight');
+            let min, max, initial;
+            
+            if (goal === 'gain') {
+                min = Math.max(currentWeight, healthyMinWeight * 0.95);
+                max = healthyMaxWeight * 1.1;
+                initial = currentWeight + 5 > max ? max : currentWeight + 5;
+            } else if (goal === 'loss') {
+                min = healthyMinWeight * 0.9;
+                max = currentWeight;
+                initial = currentWeight - 5 < min ? min : currentWeight - 5;
+            } else { // maintain
+                min = healthyMinWeight * 0.95;
+                max = healthyMaxWeight * 1.05;
+                initial = (min + max) / 2;
+            }
+            
+            slider.min = min.toFixed(1);
+            slider.max = max.toFixed(1);
+            slider.value = initial.toFixed(1);
+            slider.step = "0.5";
+            
+            updateWeightScale();
+            checkTargetWeightAppropriateness();
+        }
+
+        function updateWeightScale() {
+            const targetWeight = document.getElementById('target-weight').value;
+            document.getElementById('target-display').textContent = `Target: ${targetWeight}kg`;
+            checkTargetWeightAppropriateness();
+        }
+
+        function checkTargetWeightAppropriateness() {
+            const targetWeight = parseFloat(document.getElementById('target-weight').value);
+            const goal = document.getElementById('goal').value;
+            const feedback = document.getElementById('targetFeedback');
+            
+            let message = '';
+            let color = '#4CAF50';
+            
+            if (goal === 'gain') {
+                if (targetWeight < healthyMinWeight) {
+                    message = 'Your target is below healthy range. Consider aiming higher.';
+                    color = '#FF9800';
+                } else if (targetWeight > healthyMaxWeight) {
+                    message = 'Your target is above healthy range. Consult a doctor if this is intentional.';
+                    color = '#F44336';
+                } else {
+                    message = 'Great! This is within the healthy weight range.';
+                }
+            } else if (goal === 'loss') {
+                if (targetWeight < healthyMinWeight) {
+                    message = 'Warning: Your target is below healthy range. Consider a higher target.';
+                    color = '#F44336';
+                } else if (targetWeight > healthyMaxWeight) {
+                    message = 'Your target is still above healthy range. Consider a lower target.';
+                    color = '#FF9800';
+                } else {
+                    message = 'Excellent! This target is within the healthy range.';
+                }
+            } else { // maintain
+                if (targetWeight < healthyMinWeight || targetWeight > healthyMaxWeight) {
+                    message = 'Your target is outside the healthy range. Consider adjusting.';
+                    color = '#FF9800';
+                } else {
+                    message = 'Perfect! This maintains you in the healthy range.';
+                }
+            }
+            
+            feedback.innerHTML = `<span style="color:${color}">${message}</span>`;
+        }
+
+        finishBtn.addEventListener('click', function() {
+            const goalSelect = document.getElementById('goal');
+            const selectedOption = goalSelect.options[goalSelect.selectedIndex];
+            const targetPage = selectedOption.getAttribute('data-target');
+            
+            // Save profile data with timestamp
+            const profileData = {
+                dob: document.getElementById('dob').value,
+                height: document.getElementById('height').value,
+                weight: document.getElementById('weight').value,
+                bmi: document.getElementById('bmiValue').textContent,
+                goal: goalSelect.value,
+                targetWeight: document.getElementById('target-weight').value,
+                healthyRange: document.getElementById('healthyRange').textContent,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            // Save to both localStorage and sessionStorage as fallback
+            localStorage.setItem('healthProfile', JSON.stringify(profileData));
+            sessionStorage.setItem('healthProfile', JSON.stringify(profileData));
+            
+            // Navigate to the selected goal page
+            if (targetPage) {
+                window.location.href = targetPage;
+            } else {
+                alert('Please select a goal first');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update weight display when slider changes
+            document.getElementById('target-weight').addEventListener('input', updateWeightScale);
+            
+            // Calculate BMI when height or weight changes
+            document.getElementById('height').addEventListener('input', calculateBMI);
+            document.getElementById('weight').addEventListener('input', calculateBMI);
+            
+            // Update target weight range when goal changes
+            document.getElementById('goal').addEventListener('change', function() {
+                if (currentSlide === 4) {
+                    setupTargetWeightSlider();
+                }
+            });
+            
+            // Check if we have existing data to pre-fill
+            const savedData = localStorage.getItem('healthProfile') || sessionStorage.getItem('healthProfile');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                document.getElementById('dob').value = data.dob;
+                document.getElementById('height').value = data.height;
+                document.getElementById('weight').value = data.weight;
+                document.getElementById('goal').value = data.goal;
+                if (data.targetWeight) {
+                    document.getElementById('target-weight').value = data.targetWeight;
+                }
+                calculateBMI();
+            }
+        });
+    </script>
+</body>
+</html>
