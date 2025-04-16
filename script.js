@@ -1,51 +1,43 @@
-// Global variables with proper default values
+// Global variables
 let userData = {
     name: localStorage.getItem('userName') || 'User',
     email: localStorage.getItem('userEmail') || '',
     dob: localStorage.getItem('userDob') || '',
-    height: parseFloat(localStorage.getItem('userHeight')) || 154, // Default height
-    weight: parseFloat(localStorage.getItem('userWeight')) || 54,  // Default weight
-    targetWeight: parseFloat(localStorage.getItem('userTargetWeight')) || 50, // Default target
-    goal: localStorage.getItem('userGoal') || 'maintain',
-    joinDate: localStorage.getItem('userJoinDate') || new Date().toISOString().split('T')[0],
+    height: parseFloat(localStorage.getItem('userHeight')) || 0,
+    weight: parseFloat(localStorage.getItem('userWeight')) || 0,
+    targetWeight: parseFloat(localStorage.getItem('userTargetWeight')) || 0,
+    goal: localStorage.getItem('userGoal') || '',
+    joinDate: localStorage.getItem('userJoinDate') || new Date().getFullYear(),
     gender: localStorage.getItem('userGender') || 'female'
 };
 
-// Fixed calorie tracking initialization
-let totalCalories = parseInt(localStorage.getItem('totalCalories')) || 0;
+// Calorie tracking variables
+let totalCalories = 0;
 const dailyGoal = 270;
+
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded - initializing app');
-    
-    // First load user data
-    loadUserData();
-    
-    // Then initialize the UI
-    if (document.querySelector('.app-container')) {
-        updateProfileSection();
-        initializeCharts();
-        setupEventListeners();
-        showSection('dashboard');
-        initializeWorkoutLists();
-    }
-
-    // Popup Ad Functionality
-    const showPopupAd = () => {
+     // Popup Ad Functionality
+     const showPopupAd = () => {
         const popup = document.getElementById('adPopup');
         const closeBtn = document.querySelector('.close-btn');
         
         if (!popup || !closeBtn) return;
         
+        // Only show if user hasn't seen it recently (using sessionStorage)
         if (!sessionStorage.getItem('adShown')) {
             popup.style.display = 'flex';
+            
+            // Set flag to prevent showing again in this session
             sessionStorage.setItem('adShown', 'true');
             
+            // Close functionality
             closeBtn.addEventListener('click', function() {
                 popup.style.display = 'none';
             });
             
+            // Close when clicking outside
             popup.addEventListener('click', function(e) {
                 if (e.target === popup) {
                     popup.style.display = 'none';
@@ -53,8 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     };
-    setTimeout(showPopupAd, 500);
-
+    setTimeout(showPopupAd, 1000);
     // Handle login form submission
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
@@ -71,14 +62,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    if (document.querySelector('.app-container')) {
+        // Load user data
+        loadUserData();
+        
+        // Update UI
+        updateProfileSection();
+        initializeCharts();
+        setupEventListeners();
+        
+        // Show dashboard by default
+        showSection('dashboard');
+        
+        // Initialize workout lists
+        initializeWorkoutLists();
+    }
+
     // Profile view/edit functionality
     if (document.getElementById('profile-view')) {
         loadProfileView();
         setupProfileEdit();
     }
 
-    // Special handling for progress page
+    // Add this new condition for loss.html
     if (document.getElementById('profile-progress')) {
+        loadUserData();
         updateProfileStats();
         initializeCharts();
     }
@@ -153,13 +161,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         window.completeSetup = function() {
             const dob = document.getElementById('dob').value;
-            const height = parseFloat(document.getElementById('height').value) || 154;
-            const weight = parseFloat(document.getElementById('weight').value) || 54;
-            const goal = document.getElementById('goal').value || 'maintain';
-            const targetWeight = parseFloat(document.getElementById('target-weight').value) || 50;
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const goal = document.getElementById('goal').value;
+            const targetWeight = parseFloat(document.getElementById('target-weight').value);
         
-            if (!dob || isNaN(height) || isNaN(weight) || !goal || isNaN(targetWeight)) {
-                alert('Please complete all fields with valid values');
+            if (!dob || !height || !weight || !goal || !targetWeight) {
+                alert('Please complete all fields');
                 return;
             }
         
@@ -180,11 +188,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 targetWeight
             };
         
-            console.log('Profile setup completed with:', userData);
             window.location.href = 'loss.html';
         };
     }
 });
+
 
 // Initialize workout lists
 function initializeWorkoutLists() {
@@ -192,14 +200,17 @@ function initializeWorkoutLists() {
         list.style.display = 'none';
     });
     
+    // Add click event listeners to all subcategory headers
     document.querySelectorAll('.subcategory-header').forEach(header => {
         header.addEventListener('click', function(e) {
+            // Don't toggle if clicking on the chevron icon directly
             if (!e.target.classList.contains('fa-chevron-down')) {
                 toggleWorkouts(this);
             }
         });
     });
     
+    // Add click event listeners to chevron icons
     document.querySelectorAll('.subcategory-header .fa-chevron-down').forEach(icon => {
         icon.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -208,9 +219,25 @@ function initializeWorkoutLists() {
     });
 }
 
+// Show plan details when a plan box is clicked
+function showPlanDetails(planType) {
+    document.getElementById('main-plans-view').style.display = 'none';
+    document.getElementById(`${planType}-details`).style.display = 'block';
+}
+
+// Go back to the main plans view
+function backToPlans() {
+    document.querySelectorAll('.plan-detail-view').forEach(view => {
+        view.style.display = 'none';
+    });
+    document.getElementById('main-plans-view').style.display = 'block';
+}
+
 // Toggle workout lists visibility
 function toggleWorkouts(header) {
+    // Stop event propagation to prevent double triggering
     event.stopPropagation();
+    
     const workoutsList = header.nextElementSibling;
     const icon = header.querySelector('.fa-chevron-down');
     
@@ -225,64 +252,68 @@ function toggleWorkouts(header) {
     }
 }
 
+// Add calories to the total
+function addCalories(calories) {
+    totalCalories += calories;
+    updateCaloriesDisplay();
+    
+    // Show a quick confirmation
+    const button = event.target;
+    button.textContent = "✓ Added!";
+    button.style.backgroundColor = "#27ae60";
+    
+    // Reset button after 1.5 seconds
+    setTimeout(() => {
+        button.textContent = "Completed";
+        button.style.backgroundColor = "#2ecc71";
+    }, 1500);
+}
+
 // Update the calories display
 function updateCaloriesDisplay() {
     const caloriesElement = document.getElementById('today-calories');
     const progressElement = document.getElementById('calories-progress');
     
-    const dailyGoal = parseInt(caloriesElement.dataset.dailyGoal) || 240;
+    // Get the daily goal from the HTML element's data attribute
+    const dailyGoal = parseInt(caloriesElement.dataset.dailyGoal) || 240; // Fallback to 240 if not found
+    
+    // Update the text
     caloriesElement.textContent = `${totalCalories} / ${dailyGoal} kcal`;
     
+    // Update the progress bar
     const percentage = Math.min(100, (totalCalories / dailyGoal) * 100);
     progressElement.style.width = `${percentage}%`;
+    
+    // Change color if goal is reached
     progressElement.style.backgroundColor = totalCalories >= dailyGoal ? "#2ecc71" : "white";
 }
 
-// Load user data with proper validation
 function loadUserData() {
-    console.log('Loading user data from localStorage');
+    userData = {
+        name: localStorage.getItem('userName') || 'User',
+        email: localStorage.getItem('userEmail') || '',
+        dob: localStorage.getItem('userDob') || '',
+        height: parseFloat(localStorage.getItem('userHeight')) || 0,
+        weight: parseFloat(localStorage.getItem('userWeight')) || 0,
+        targetWeight: parseFloat(localStorage.getItem('userTargetWeight')) || 0,
+        goal: localStorage.getItem('userGoal') || '',
+        joinDate: localStorage.getItem('userJoinDate') || new Date().getFullYear(),
+        gender: localStorage.getItem('userGender') || 'female'
+    };
     
-    try {
-        userData = {
-            name: localStorage.getItem('userName') || 'User',
-            email: localStorage.getItem('userEmail') || '',
-            dob: localStorage.getItem('userDob') || '',
-            height: parseFloat(localStorage.getItem('userHeight')) || 154,
-            weight: parseFloat(localStorage.getItem('userWeight')) || 54,
-            targetWeight: parseFloat(localStorage.getItem('userTargetWeight')) || 50,
-            goal: localStorage.getItem('userGoal') || 'maintain',
-            joinDate: localStorage.getItem('userJoinDate') || new Date().toISOString().split('T')[0],
-            gender: localStorage.getItem('userGender') || 'female'
-        };
-        
-        console.log('Loaded user data:', userData);
-        
-        if (document.getElementById('profile-progress')) {
-            updateProfileStats();
-        }
-    } catch (error) {
-        console.error('Error loading user data:', error);
-        // Fallback to defaults
-        userData = {
-            name: 'User',
-            email: '',
-            dob: '',
-            height: 154,
-            weight: 54,
-            targetWeight: 50,
-            goal: 'maintain',
-            joinDate: new Date().toISOString().split('T')[0],
-            gender: 'female'
-        };
+    // Update profile stats if on loss.html
+    if (document.getElementById('profile-progress')) {
+        updateProfileStats();
     }
 }
 
-// Update profile section with fallback values
 function updateProfileSection() {
+    // Update profile info
     document.getElementById('profile-name').textContent = userData.name;
     document.getElementById('member-since').textContent = userData.joinDate;
     document.getElementById('user-greeting').textContent = userData.name.split(' ')[0];
 
+    // Update profile pic initials
     const initials = userData.name.split(' ')
                   .map(name => name[0])
                   .join('')
@@ -290,60 +321,69 @@ function updateProfileSection() {
     const profilePic = document.getElementById('profile-pic');
     if (profilePic) profilePic.textContent = initials || 'U';
 
+    // Update stats
     updateWeightDisplays();
     calculateAndDisplayBMI();
+    
+    // Initialize charts with updated data
     initializeCharts();
 }
 
-// Enhanced weight display with fallbacks
 function updateWeightDisplays() {
-    const currentWeight = userData.weight || 54;
-    const targetWeight = userData.targetWeight || 50;
+    const currentWeightElements = document.querySelectorAll('.stat-item:nth-child(1) p, .stat-card:nth-child(1) p');
+    const targetWeightElements = document.querySelectorAll('.stat-item:nth-child(2) p, .stat-card:nth-child(2) p');
     
-    document.querySelectorAll('.stat-item:nth-child(1) p, .stat-card:nth-child(1) p').forEach(el => {
+    currentWeightElements.forEach(el => {
         if (el.textContent.includes('kg') || el.classList.contains('stat-value')) {
-            el.textContent = `${currentWeight} kg`;
+            el.textContent = `${userData.weight} kg`;
         }
     });
     
-    document.querySelectorAll('.stat-item:nth-child(2) p, .stat-card:nth-child(2) p').forEach(el => {
+    targetWeightElements.forEach(el => {
         if (el.textContent.includes('kg') || el.classList.contains('stat-value')) {
-            el.textContent = `${targetWeight} kg`;
+            el.textContent = `${userData.targetWeight} kg`;
         }
     });
 
-    const weightDiff = (currentWeight - targetWeight).toFixed(1);
-    document.querySelectorAll('.stat-card:nth-child(2) span, .trend').forEach(el => {
+    // Update weight difference
+    const weightDiff = (userData.weight - userData.targetWeight).toFixed(1);
+    const weightDiffElements = document.querySelectorAll('.stat-card:nth-child(2) span, .trend');
+    
+    weightDiffElements.forEach(el => {
         if (el.classList.contains('trend') || el.parentElement.textContent.includes('Target')) {
             el.innerHTML = `${Math.abs(weightDiff)} kg <i class="fas fa-arrow-${weightDiff > 0 ? 'up' : 'down'}"></i>`;
             el.className = weightDiff > 0 ? 'trend up' : 'trend down';
         }
     });
 
+    // Update daily calories
     const dailyCalories = calculateDailyCalories();
     document.querySelector('.stat-item:nth-child(3) p').textContent = `${dailyCalories.toLocaleString()} kcal`;
 }
 
-// Calculate daily calories with fallback values
 function calculateDailyCalories() {
-    const weight = userData.weight || 54;
-    const height = userData.height || 154;
-    const age = userData.dob ? (new Date().getFullYear() - new Date(userData.dob).getFullYear()) : 30;
-    
+    // Basic Harris-Benedict equation for BMR
     let bmr;
+    const age = new Date().getFullYear() - new Date(userData.dob).getFullYear();
+    
     if (userData.gender === 'male') {
-        bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+        bmr = 88.362 + (13.397 * userData.weight) + (4.799 * userData.height) - (5.677 * age);
     } else {
-        bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+        bmr = 447.593 + (9.247 * userData.weight) + (3.098 * userData.height) - (4.330 * age);
     }
     
+    // Adjust for activity level (assuming moderate activity)
     const tdee = bmr * 1.55;
     
-    if (userData.goal === 'loss') return Math.round(tdee - 500);
-    if (userData.goal === 'gain') return Math.round(tdee + 500);
-    return Math.round(tdee);
+    // Adjust for goal
+    if (userData.goal === 'loss') {
+        return Math.round(tdee - 500); // 500 calorie deficit for weight loss
+    } else if (userData.goal === 'gain') {
+        return Math.round(tdee + 500); // 500 calorie surplus for weight gain
+    } else {
+        return Math.round(tdee); // Maintenance
+    }
 }
-
 // Navigation functions
 function showSection(sectionId) {
     document.querySelectorAll('.content-section').forEach(section => {
@@ -353,6 +393,7 @@ function showSection(sectionId) {
     const section = document.getElementById(sectionId);
     if (section) section.classList.add('active');
 
+    // Update nav items
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
         if (item.getAttribute('onclick')?.includes(sectionId)) {
@@ -360,13 +401,141 @@ function showSection(sectionId) {
         }
     });
 
+    // Toggle diet log visibility
     const dietLog = document.getElementById('diet-log');
     if (dietLog) {
         dietLog.classList.toggle('active', sectionId === 'diet');
     }
 }
 
-// Weight logging with validation
+function showWorkoutCategories(level) {
+    document.querySelectorAll('.content-section').forEach(el => {
+        el.classList.remove('active');
+    });
+
+    const workoutDetails = document.getElementById('workout-details');
+    if (!workoutDetails) return;
+
+    const plan = workoutPlans[level];
+    let html = `<div class="workout-categories">
+                    <div class="back-button" onclick="backToWorkoutPlans()">
+                        <i class="fas fa-arrow-left"></i> Back to Plans
+                    </div>
+                    <h2>${level.charAt(0).toUpperCase() + level.slice(1)} Workout Plan</h2>`;
+
+    for (const [category, exercises] of Object.entries(plan)) {
+        html += `<div class="workout-category">
+                    <div class="category-header" onclick="toggleCategory('${level}-${category.replace(/\s+/g, '-').toLowerCase()}')">
+                        <h3><i class="fas fa-dumbbell"></i> ${category}</h3>
+                        <span>▼</span>
+                    </div>
+                    <div class="category-content" id="${level}-${category.replace(/\s+/g, '-').toLowerCase()}">`;
+
+        exercises.forEach(exercise => {
+            html += `<div class="exercise">
+                        <div class="exercise-info">
+                            <span class="exercise-name">${exercise.name}</span>
+                            <span class="exercise-sets">${exercise.sets}x${exercise.reps}</span>
+                        </div>
+                    </div>`;
+        });
+
+        html += `</div></div>`;
+    }
+
+    html += `</div>`;
+    workoutDetails.innerHTML = html;
+    workoutDetails.classList.add('active');
+}
+
+function showDietCategories(type) {
+    document.querySelectorAll('.content-section').forEach(el => {
+        el.classList.remove('active');
+    });
+
+    const dietDetails = document.getElementById('diet-details');
+    if (!dietDetails) return;
+
+    const plan = dietPlans[type];
+    let html = `<div class="diet-categories">
+                    <div class="back-button" onclick="backToDietPlans()">
+                        <i class="fas fa-arrow-left"></i> Back to Plans
+                    </div>
+                    <h2>${type.charAt(0).toUpperCase() + type.slice(1)} Diet Plan</h2>`;
+
+    for (const [category, items] of Object.entries(plan)) {
+        html += `<div class="diet-category">
+                    <h3><i class="fas fa-utensils"></i> ${category.charAt(0).toUpperCase() + category.slice(1)}</h3>
+                    <ul>`;
+
+        items.forEach(item => {
+            html += `<li>${item}</li>`;
+        });
+
+        html += `</ul></div>`;
+    }
+
+    html += `</div>`;
+    dietDetails.innerHTML = html;
+    dietDetails.classList.add('active');
+}
+
+function backToWorkoutPlans() {
+    showSection('workout');
+}
+
+function backToDietPlans() {
+    showSection('diet');
+}
+
+// Diet functions
+function addFood() {
+    const foodInput = document.getElementById('food-input');
+    const foodList = document.getElementById('food-list');
+
+    if (foodInput.value.trim()) {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            ${foodInput.value.trim()}
+            <span class="remove-food" onclick="this.parentElement.remove()">
+                <i class="fas fa-times"></i>
+            </span>
+        `;
+        foodList.appendChild(li);
+        foodInput.value = '';
+    }
+}
+
+// Water tracking
+function logWater(amount) {
+    const waterProgress = document.querySelector('.water-progress-fill');
+    const waterText = document.querySelector('.water-progress span');
+
+    if (!waterProgress || !waterText) return;
+
+    const currentText = waterText.textContent;
+    const currentAmount = parseInt(currentText.split('/')[0]);
+    const totalAmount = parseInt(currentText.split('/')[1].match(/\d+/)[0]);
+
+    let newAmount = currentAmount + amount;
+    if (newAmount > totalAmount) newAmount = totalAmount;
+
+    const newPercentage = (newAmount / totalAmount) * 100;
+    waterProgress.style.width = `${newPercentage}%`;
+    waterText.textContent = `${newAmount}/${totalAmount} L today`;
+
+    // Visual feedback
+    const bottles = document.querySelectorAll('.bottle');
+    const bottleIndex = amount === 1 ? 0 : amount === 2 ? 1 : 2;
+    if (bottles[bottleIndex]) {
+        bottles[bottleIndex].style.transform = 'scale(1.1)';
+        setTimeout(() => {
+            bottles[bottleIndex].style.transform = '';
+        }, 300);
+    }
+}
+
+// Weight logging
 function logWeight() {
     const weightInput = document.getElementById('weight-input');
     const dateInput = document.getElementById('weight-date');
@@ -374,34 +543,57 @@ function logWeight() {
     if (weightInput.value && !isNaN(weightInput.value)) {
         const newWeight = parseFloat(weightInput.value);
         
+        // Update userData and localStorage
         userData.weight = newWeight;
         localStorage.setItem('userWeight', newWeight);
 
+        // Update all displays
         updateWeightDisplays();
         calculateAndDisplayBMI();
 
-        showToast(`Weight ${newWeight} kg logged successfully for ${dateInput.value || 'today'}`);
+        // Show success message
+        const message = `Weight ${newWeight} kg logged successfully for ${dateInput.value || 'today'}`;
+        showToast(message);
 
+        // Clear inputs
         weightInput.value = '';
         dateInput.value = '';
     } else {
         showToast('Please enter a valid weight', 'error');
     }
+    
 }
 
-// Calculate and display BMI
-function calculateAndDisplayBMI() {
-    const weight = userData.weight || 54;
-    const height = (userData.height || 154) / 100;
-    
-    if (weight <= 0 || height <= 0) return;
+// Helper functions
+function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    field.type = field.type === 'password' ? 'text' : 'password';
+}
 
-    const bmi = (weight / (height * height)).toFixed(1);
+function toggleCategory(categoryId) {
+    const category = document.getElementById(categoryId);
+    if (!category) return;
+
+    category.classList.toggle('active');
+
+    const arrow = event.currentTarget.querySelector('span:last-child');
+    if (arrow) {
+        arrow.textContent = category.classList.contains('active') ? '▲' : '▼';
+    }
+}
+
+function calculateAndDisplayBMI() {
+    if (userData.height <= 0 || userData.weight <= 0) return;
+
+    const heightInMeters = userData.height / 100;
+    const bmi = (userData.weight / (heightInMeters * heightInMeters)).toFixed(1);
+
+    // Update BMI display if element exists
     const bmiElement = document.querySelector('.bmi-value');
-    
     if (bmiElement) {
         bmiElement.textContent = bmi;
         
+        // Update BMI category
         const categoryElement = document.querySelector('.bmi-category');
         if (categoryElement) {
             let category = '';
@@ -416,7 +608,7 @@ function calculateAndDisplayBMI() {
     }
 }
 
-// Profile view functions
+// Profile view/edit functions
 function loadProfileView() {
     document.getElementById('profile-dob').textContent = userData.dob ? 
         new Date(userData.dob).toLocaleDateString() : 'Not set';
@@ -432,133 +624,6 @@ function loadProfileView() {
     calculateAndDisplayBMI();
 }
 
-// Update profile stats
-function updateProfileStats() {
-    const currentWeightDisplay = document.getElementById('current-weight-display');
-    const targetWeightDisplay = document.getElementById('target-weight-display');
-    const caloriesDisplay = document.getElementById('calories-display');
-    
-    if (currentWeightDisplay) {
-        currentWeightDisplay.textContent = `${userData.weight || 54} kg`;
-    }
-    
-    if (targetWeightDisplay) {
-        targetWeightDisplay.textContent = `${userData.targetWeight || 50} kg`;
-    }
-    
-    if (caloriesDisplay) {
-        caloriesDisplay.textContent = `${calculateDailyCalories().toLocaleString()} kcal`;
-    }
-}
-
-// Toast notification
-function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 10);
-
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
-    }, 3000);
-}
-
-// Initialize charts with fallback data
-function initializeCharts() {
-    if (document.getElementById('weightChart')) {
-        const weightCtx = document.getElementById('weightChart').getContext('2d');
-        new Chart(weightCtx, {
-            type: 'line',
-            data: {
-                labels: generateLast30Days(),
-                datasets: [{
-                    label: 'Weight (kg)',
-                    data: generateWeightData(),
-                    borderColor: '#6a3093',
-                    backgroundColor: 'rgba(166, 133, 226, 0.1)',
-                    tension: 0.3,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        min: Math.floor((userData.targetWeight || 50) - 5),
-                        max: Math.ceil((userData.weight || 54)) + 5
-                    }
-                }
-            }
-        });
-    }
-
-    if (document.getElementById('activityChart')) {
-        const activityCtx = document.getElementById('activityChart').getContext('2d');
-        new Chart(activityCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                datasets: [{
-                    label: 'Steps',
-                    data: [8245, 7542, 9321, 6874, 10245, 5432, 12345],
-                    backgroundColor: 'rgba(166, 133, 226, 0.7)'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-}
-
-// Helper functions for chart data
-function generateLast30Days() {
-    const days = [];
-    for (let i = 30; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
-        days.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-    }
-    return days;
-}
-
-function generateWeightData() {
-    const data = [];
-    const startWeight = userData.weight || 54;
-    const targetWeight = userData.targetWeight || 50;
-
-    for (let i = 0; i <= 30; i++) {
-        const progress = i / 30;
-        const targetDiff = startWeight - targetWeight;
-        const baseWeight = startWeight - (targetDiff * progress);
-        const randomVariation = (Math.random() - 0.5) * 0.5;
-        data.push(parseFloat((baseWeight + randomVariation).toFixed(1)));
-    }
-
-    return data;
-}
-
-// Event listeners for buttons
-document.getElementById("finishBtn")?.addEventListener("click", function() {
-    window.location.href = "loss.html";
-});
-
-// Setup profile edit
 function setupProfileEdit() {
     const editBtn = document.getElementById('edit-profile-btn');
     if (!editBtn) return;
@@ -567,9 +632,6 @@ function setupProfileEdit() {
         window.location.href = 'profile.html?edit=true';
     });
 }
-
-/* All other existing functions remain exactly the same */
-// ... [All other existing functions from your original code] ...
 
 // Toast notification
 function showToast(message, type = 'success') {
