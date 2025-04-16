@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     };
-    setTimeout(showPopupAd, 1000);
+    setTimeout(showPopupAd, 500);
 
     // Handle login form submission
     const loginForm = document.getElementById('login-form');
