@@ -15,29 +15,25 @@ let userData = {
 let totalCalories = 0;
 const dailyGoal = 270;
 
-
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-     // Popup Ad Functionality
-     const showPopupAd = () => {
+    console.log("DOM loaded - current userData:", userData); // Debug
+    
+    // Popup Ad Functionality
+    const showPopupAd = () => {
         const popup = document.getElementById('adPopup');
         const closeBtn = document.querySelector('.close-btn');
         
         if (!popup || !closeBtn) return;
         
-        // Only show if user hasn't seen it recently (using sessionStorage)
         if (!sessionStorage.getItem('adShown')) {
             popup.style.display = 'flex';
-            
-            // Set flag to prevent showing again in this session
             sessionStorage.setItem('adShown', 'true');
             
-            // Close functionality
             closeBtn.addEventListener('click', function() {
                 popup.style.display = 'none';
             });
             
-            // Close when clicking outside
             popup.addEventListener('click', function(e) {
                 if (e.target === popup) {
                     popup.style.display = 'none';
@@ -46,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
     setTimeout(showPopupAd, 1000);
+
     // Handle login form submission
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
@@ -63,18 +60,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (document.querySelector('.app-container')) {
-        // Load user data
         loadUserData();
-        
-        // Update UI
         updateProfileSection();
         initializeCharts();
         setupEventListeners();
-        
-        // Show dashboard by default
         showSection('dashboard');
-        
-        // Initialize workout lists
         initializeWorkoutLists();
     }
 
@@ -84,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function() {
         setupProfileEdit();
     }
 
-    // Add this new condition for loss.html
     if (document.getElementById('profile-progress')) {
         loadUserData();
         updateProfileStats();
@@ -171,14 +160,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
         
-            // Save to localStorage
             localStorage.setItem('userDob', dob);
             localStorage.setItem('userHeight', height);
             localStorage.setItem('userWeight', weight);
             localStorage.setItem('userGoal', goal);
             localStorage.setItem('userTargetWeight', targetWeight);
             
-            // Update userData object
             userData = {
                 ...userData,
                 dob,
@@ -188,11 +175,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 targetWeight
             };
         
+            console.log("Setup complete - saved weights:", {weight, targetWeight}); // Debug
             window.location.href = 'loss.html';
         };
     }
 });
-
 
 // Initialize workout lists
 function initializeWorkoutLists() {
@@ -200,17 +187,14 @@ function initializeWorkoutLists() {
         list.style.display = 'none';
     });
     
-    // Add click event listeners to all subcategory headers
     document.querySelectorAll('.subcategory-header').forEach(header => {
         header.addEventListener('click', function(e) {
-            // Don't toggle if clicking on the chevron icon directly
             if (!e.target.classList.contains('fa-chevron-down')) {
                 toggleWorkouts(this);
             }
         });
     });
     
-    // Add click event listeners to chevron icons
     document.querySelectorAll('.subcategory-header .fa-chevron-down').forEach(icon => {
         icon.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -219,13 +203,11 @@ function initializeWorkoutLists() {
     });
 }
 
-// Show plan details when a plan box is clicked
 function showPlanDetails(planType) {
     document.getElementById('main-plans-view').style.display = 'none';
     document.getElementById(`${planType}-details`).style.display = 'block';
 }
 
-// Go back to the main plans view
 function backToPlans() {
     document.querySelectorAll('.plan-detail-view').forEach(view => {
         view.style.display = 'none';
@@ -233,9 +215,7 @@ function backToPlans() {
     document.getElementById('main-plans-view').style.display = 'block';
 }
 
-// Toggle workout lists visibility
 function toggleWorkouts(header) {
-    // Stop event propagation to prevent double triggering
     event.stopPropagation();
     
     const workoutsList = header.nextElementSibling;
@@ -252,39 +232,31 @@ function toggleWorkouts(header) {
     }
 }
 
-// Add calories to the total
 function addCalories(calories) {
     totalCalories += calories;
     updateCaloriesDisplay();
     
-    // Show a quick confirmation
     const button = event.target;
     button.textContent = "✓ Added!";
     button.style.backgroundColor = "#27ae60";
     
-    // Reset button after 1.5 seconds
     setTimeout(() => {
         button.textContent = "Completed";
         button.style.backgroundColor = "#2ecc71";
     }, 1500);
 }
 
-// Update the calories display
 function updateCaloriesDisplay() {
     const caloriesElement = document.getElementById('today-calories');
     const progressElement = document.getElementById('calories-progress');
     
-    // Get the daily goal from the HTML element's data attribute
-    const dailyGoal = parseInt(caloriesElement.dataset.dailyGoal) || 240; // Fallback to 240 if not found
+    const dailyGoal = parseInt(caloriesElement.dataset.dailyGoal) || 240;
     
-    // Update the text
     caloriesElement.textContent = `${totalCalories} / ${dailyGoal} kcal`;
     
-    // Update the progress bar
     const percentage = Math.min(100, (totalCalories / dailyGoal) * 100);
     progressElement.style.width = `${percentage}%`;
     
-    // Change color if goal is reached
     progressElement.style.backgroundColor = totalCalories >= dailyGoal ? "#2ecc71" : "white";
 }
 
@@ -301,19 +273,18 @@ function loadUserData() {
         gender: localStorage.getItem('userGender') || 'female'
     };
     
-    // Update profile stats if on loss.html
+    console.log("Loaded userData:", userData); // Debug
+    
     if (document.getElementById('profile-progress')) {
         updateProfileStats();
     }
 }
 
 function updateProfileSection() {
-    // Update profile info
     document.getElementById('profile-name').textContent = userData.name;
     document.getElementById('member-since').textContent = userData.joinDate;
     document.getElementById('user-greeting').textContent = userData.name.split(' ')[0];
 
-    // Update profile pic initials
     const initials = userData.name.split(' ')
                   .map(name => name[0])
                   .join('')
@@ -321,15 +292,18 @@ function updateProfileSection() {
     const profilePic = document.getElementById('profile-pic');
     if (profilePic) profilePic.textContent = initials || 'U';
 
-    // Update stats
     updateWeightDisplays();
     calculateAndDisplayBMI();
     
-    // Initialize charts with updated data
     initializeCharts();
 }
 
 function updateWeightDisplays() {
+    console.log("Updating weight displays with:", { 
+        weight: userData.weight, 
+        target: userData.targetWeight 
+    }); // Debug
+    
     const currentWeightElements = document.querySelectorAll('.stat-item:nth-child(1) p, .stat-card:nth-child(1) p');
     const targetWeightElements = document.querySelectorAll('.stat-item:nth-child(2) p, .stat-card:nth-child(2) p');
     
@@ -345,7 +319,6 @@ function updateWeightDisplays() {
         }
     });
 
-    // Update weight difference
     const weightDiff = (userData.weight - userData.targetWeight).toFixed(1);
     const weightDiffElements = document.querySelectorAll('.stat-card:nth-child(2) span, .trend');
     
@@ -356,13 +329,11 @@ function updateWeightDisplays() {
         }
     });
 
-    // Update daily calories
     const dailyCalories = calculateDailyCalories();
     document.querySelector('.stat-item:nth-child(3) p').textContent = `${dailyCalories.toLocaleString()} kcal`;
 }
 
 function calculateDailyCalories() {
-    // Basic Harris-Benedict equation for BMR
     let bmr;
     const age = new Date().getFullYear() - new Date(userData.dob).getFullYear();
     
@@ -372,18 +343,18 @@ function calculateDailyCalories() {
         bmr = 447.593 + (9.247 * userData.weight) + (3.098 * userData.height) - (4.330 * age);
     }
     
-    // Adjust for activity level (assuming moderate activity)
     const tdee = bmr * 1.55;
     
-    // Adjust for goal
     if (userData.goal === 'loss') {
-        return Math.round(tdee - 500); // 500 calorie deficit for weight loss
+        return Math.round(tdee - 500);
     } else if (userData.goal === 'gain') {
-        return Math.round(tdee + 500); // 500 calorie surplus for weight gain
+        return Math.round(tdee + 500);
     } else {
-        return Math.round(tdee); // Maintenance
+        return Math.round(tdee);
     }
 }
+
+// ... [rest of the original code remains exactly the same]
 // Navigation functions
 function showSection(sectionId) {
     document.querySelectorAll('.content-section').forEach(section => {
